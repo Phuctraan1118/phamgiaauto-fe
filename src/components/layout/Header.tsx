@@ -7,6 +7,7 @@ import {
   BadgeDollarSign,
   Wrench,
   Building2,
+  CalendarDays,
   FileSearch,
   Phone,
   PlusCircle, 
@@ -159,10 +160,10 @@ export function Header() {
                     </DropdownMenuContent>
                   </DropdownMenu>
                 ) : (
-                  <Link to="/auth">
-                    <Button variant="outline" size="sm" className="gap-2">
-                      <User className="w-4 h-4" />
-                      Đăng nhập
+                  <Link to="/lien-he">
+                    <Button variant="hero" size="sm" className="gap-2">
+                      <CalendarDays className="w-4 h-4" />
+                      Đặt lịch xem xe
                     </Button>
                   </Link>
                 )}
@@ -255,10 +256,10 @@ export function Header() {
                     </Button>
                   </>
                 ) : (
-                  <Link to="/auth" className="block">
-                    <Button variant="outline" className="w-full justify-start gap-2">
-                      <User className="w-4 h-4" />
-                      Đăng nhập / Đăng ký
+                  <Link to="/lien-he" className="block">
+                    <Button variant="hero" className="w-full justify-start gap-2">
+                      <CalendarDays className="w-4 h-4" />
+                      Đặt lịch xem xe
                     </Button>
                   </Link>
                 )}
