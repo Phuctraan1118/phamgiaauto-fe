@@ -1,0 +1,325 @@
+@import '@fontsource/urbanist/500.css';
+@import '@fontsource/urbanist/600.css';
+@import '@fontsource/urbanist/700.css';
+@import '@fontsource/urbanist/800.css';
+@import '@fontsource/manrope/400.css';
+@import '@fontsource/manrope/500.css';
+@import '@fontsource/manrope/600.css';
+@import '@fontsource/manrope/700.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Phạm Gia Automotive Design System
+   Theme: premium graphite and silver, with restrained Pham Gia red accents
+*/
+
+@layer base {
+  :root {
+    /* Core Colors - Pham Gia Light */
+    --background: 0 0% 98%;
+    --foreground: 225 8% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 225 8% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 225 8% 10%;
+
+    /* Primary - Graphite keeps controls distinct from the red logo */
+    --primary: 220 10% 18%;
+    --primary-foreground: 0 0% 100%;
+    --primary-light: 220 10% 94%;
+    --primary-dark: 225 12% 10%;
+    --primary-glow: 215 12% 42%;
+
+    /* Secondary - Metallic silver surfaces */
+    --secondary: 220 8% 94%;
+    --secondary-foreground: 225 8% 16%;
+
+    /* Accent - Logo red, reserved for important highlights */
+    --accent: 348 72% 38%;
+    --accent-foreground: 0 0% 100%;
+
+    /* Muted */
+    --muted: 220 7% 96%;
+    --muted-foreground: 220 6% 42%;
+
+    /* Destructive */
+    --destructive: 0 72% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Borders & Inputs */
+    --border: 220 8% 84%;
+    --input: 220 8% 84%;
+    --ring: 220 10% 18%;
+
+    --radius: 0.5rem;
+
+    /* Custom Colors */
+    --success: 158 42% 47%;
+    --success-foreground: 0 0% 100%;
+    --warning: 25 88% 55%;
+    --warning-foreground: 0 0% 100%;
+    --info: 217 91% 50%;
+    --info-foreground: 0 0% 100%;
+
+    /* Plate Colors - Vietnamese License Plate */
+    --plate-bg: 225 19% 11%;
+    --plate-text: 0 0% 100%;
+    --plate-border: 222 30% 30%;
+
+    /* Shadows - elegant, layered */
+    --shadow-sm: 0 1px 2px 0 hsl(225 8% 10% / 0.05);
+    --shadow-md: 0 6px 18px -8px hsl(225 8% 10% / 0.16), 0 2px 6px -3px hsl(225 8% 10% / 0.09);
+    --shadow-lg: 0 18px 48px -18px hsl(225 8% 10% / 0.22), 0 6px 14px -8px hsl(220 10% 18% / 0.18);
+    --shadow-xl: 0 28px 70px -24px hsl(220 10% 18% / 0.26), 0 10px 22px -12px hsl(225 8% 10% / 0.14);
+    --shadow-gold: 0 8px 24px -6px hsl(348 78% 36% / 0.28);
+
+    /* Sidebar */
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 225 8% 18%;
+    --sidebar-primary: 220 10% 18%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 8% 94%;
+    --sidebar-accent-foreground: 225 8% 16%;
+    --sidebar-border: 220 8% 84%;
+    --sidebar-ring: 220 10% 18%;
+  }
+
+  .dark {
+    --background: 222 47% 6%;
+    --foreground: 210 40% 98%;
+
+    --card: 222 40% 10%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222 40% 10%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 348 70% 52%;
+    --primary-foreground: 0 0% 100%;
+    --primary-light: 348 38% 16%;
+    --primary-dark: 348 78% 38%;
+    --primary-glow: 350 72% 58%;
+
+    --secondary: 220 8% 14%;
+    --secondary-foreground: 210 40% 98%;
+
+    --accent: 220 7% 62%;
+    --accent-foreground: 0 0% 100%;
+
+    --muted: 220 7% 14%;
+    --muted-foreground: 215 16% 65%;
+
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 222 30% 18%;
+    --input: 222 30% 18%;
+    --ring: 348 70% 52%;
+
+    --success: 158 48% 54%;
+    --warning: 25 88% 60%;
+    --info: 217 91% 60%;
+
+    --plate-bg: 222 40% 12%;
+    --plate-text: 0 0% 100%;
+    --plate-border: 222 30% 25%;
+
+    --sidebar-background: 222 47% 8%;
+    --sidebar-foreground: 210 30% 88%;
+    --sidebar-primary: 348 70% 52%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 8% 14%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 222 30% 18%;
+    --sidebar-ring: 348 70% 52%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: "ss01", "cv11";
+  }
+
+  h1, h2, h3, h4, h5 {
+    @apply font-display tracking-tight;
+    letter-spacing: -0.02em;
+  }
+}
+
+@layer components {
+  .car-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 300px));
+    justify-content: start;
+    gap: 1.25rem;
+  }
+
+  @media (max-width: 639px) {
+    .car-grid {
+      grid-template-columns: minmax(0, 300px);
+      justify-content: center;
+      gap: 1rem;
+    }
+  }
+
+  /* Custom Card Styles */
+  .card-hover {
+    @apply transition-all duration-300 ease-out hover:shadow-lg hover:-translate-y-1;
+  }
+
+  /* Vietnamese License Plate Style */
+  .plate-number {
+    @apply inline-flex items-center justify-center px-4 py-2 rounded-md font-bold text-lg tracking-wider;
+    background: hsl(var(--plate-bg));
+    color: hsl(var(--plate-text));
+    border: 2px solid hsl(var(--plate-border));
+    font-family: 'Be Vietnam Pro', sans-serif;
+    letter-spacing: 0.1em;
+  }
+
+  /* Gradient Backgrounds */
+  .gradient-primary {
+    background: linear-gradient(135deg, hsl(var(--primary-dark)) 0%, hsl(var(--primary)) 100%);
+  }
+
+  .gradient-accent {
+    background: linear-gradient(135deg, hsl(var(--primary-dark)) 0%, hsl(var(--primary)) 55%, hsl(var(--accent)) 100%);
+  }
+
+  .gradient-hero {
+    background:
+      radial-gradient(1200px 620px at 88% 10%, hsl(var(--accent) / 0.07), transparent 62%),
+      radial-gradient(900px 520px at 4% 84%, hsl(var(--primary) / 0.06), transparent 64%),
+      linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(var(--secondary)) 100%);
+  }
+
+  /* Badge Variants */
+  .badge-verified {
+    @apply inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium rounded-full;
+    background: hsl(var(--success) / 0.1);
+    color: hsl(var(--success));
+  }
+
+  .badge-auction {
+    @apply inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium rounded-full;
+    background: hsl(var(--accent) / 0.1);
+    color: hsl(var(--accent));
+  }
+
+  .badge-live {
+    @apply inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium rounded-full animate-pulse;
+    background: hsl(var(--destructive) / 0.1);
+    color: hsl(var(--destructive));
+  }
+
+  /* Search Input */
+  .search-input {
+    @apply w-full pl-10 pr-4 py-3 rounded-xl border-2 border-transparent bg-card shadow-sm transition-all duration-200;
+  }
+
+  .search-input:focus {
+    @apply border-primary outline-none ring-2 ring-primary/20;
+  }
+
+  /* Countdown Timer */
+  .countdown-box {
+    @apply flex flex-col items-center justify-center p-2 rounded-lg bg-secondary min-w-[3.5rem];
+  }
+
+  .countdown-value {
+    @apply text-xl font-bold text-foreground tabular-nums;
+  }
+
+  .countdown-label {
+    @apply text-xs text-muted-foreground;
+  }
+
+  /* Price Display */
+  .price-display {
+    @apply text-2xl font-bold text-primary;
+  }
+
+  .price-small {
+    @apply text-lg font-semibold text-foreground;
+  }
+}
+
+@layer utilities {
+  /* Glass Effect */
+  .glass {
+    @apply backdrop-blur-md bg-card/80;
+  }
+
+  /* Text Gradient */
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, hsl(var(--accent)) 0%, hsl(348 62% 30%) 42%, hsl(var(--primary)) 100%);
+  }
+
+  /* Animate Slide Up */
+  .animate-slide-up {
+    animation: slideUp 0.5s ease-out;
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Animate Fade In */
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  /* Custom Scrollbar */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--border)) transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: hsl(var(--border));
+    border-radius: 3px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground));
+  }
+}
