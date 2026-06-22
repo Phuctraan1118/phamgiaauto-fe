@@ -3,11 +3,12 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
   ArrowRight, 
+  BadgeDollarSign,
+  CalendarDays,
   Car, 
   Shield, 
   Clock,
-  TrendingUp,
-  Users,
+  Search,
   ChevronRight
 } from 'lucide-react';
 import { Layout } from '@/components/layout/Layout';
@@ -21,10 +22,31 @@ import homeHeroShowroom from '@/assets/home-hero-showroom.png';
 
 type CarListingDB = Tables<'car_listings'>;
 
-const stats = [
-  { label: 'Xe đang bán', value: '12,500+', icon: Car },
-  { label: 'Khách hàng', value: '50,000+', icon: Users },
-  { label: 'Giao dịch thành công', value: '8,000+', icon: TrendingUp },
+const quickActions = [
+  {
+    eyebrow: 'Dành cho người mua',
+    title: 'Tìm chiếc xe phù hợp',
+    description: 'Khám phá kho xe đã được Phạm Gia tuyển chọn và kiểm tra kỹ.',
+    href: '/xe',
+    action: 'Xem kho xe',
+    icon: Search,
+  },
+  {
+    eyebrow: 'Trải nghiệm thực tế',
+    title: 'Đặt lịch xem và lái thử',
+    description: 'Chọn thời gian thuận tiện để xem xe và nhận tư vấn trực tiếp.',
+    href: '/lien-he',
+    action: 'Đặt lịch ngay',
+    icon: CalendarDays,
+  },
+  {
+    eyebrow: 'Dành cho người bán',
+    title: 'Bán xe nhanh, giá minh bạch',
+    description: 'Gửi thông tin để được kiểm tra, định giá và thu mua nhanh chóng.',
+    href: '/thu-mua-xe',
+    action: 'Nhận định giá',
+    icon: BadgeDollarSign,
+  },
 ];
 
 const features = [
@@ -104,26 +126,48 @@ export default function HomePage() {
 
       </section>
 
-      {/* Stats */}
-      <section id="ve-chung-toi" className="relative z-0 py-8 sm:py-12 bg-card border-y border-border scroll-mt-20">
+      {/* Customer journeys */}
+      <section id="ve-chung-toi" className="relative z-0 bg-card border-y border-border scroll-mt-20">
         <div className="container px-4">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
-            {stats.map((stat, index) => (
-              <motion.div
-                key={stat.label}
-                className="text-center"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: index * 0.1 }}
-              >
-                <div className="inline-flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-primary/10 text-primary mb-2 sm:mb-3">
-                  <stat.icon className="w-5 h-5 sm:w-6 sm:h-6" />
-                </div>
-                <p className="text-lg sm:text-2xl md:text-3xl font-bold text-foreground">{stat.value}</p>
-                <p className="text-xs sm:text-sm text-muted-foreground">{stat.label}</p>
-              </motion.div>
-            ))}
+          <div className="grid lg:grid-cols-[0.72fr_2.28fr] lg:items-stretch">
+            <div className="py-7 sm:py-9 lg:pr-10 lg:border-r lg:border-border">
+              <p className="text-xs font-semibold uppercase text-primary">Phạm Gia Automotive</p>
+              <h2 className="mt-2 text-xl sm:text-2xl font-bold text-foreground">
+                Chúng tôi có thể giúp gì cho bạn?
+              </h2>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                Bắt đầu nhanh với nhu cầu của bạn hôm nay.
+              </p>
+            </div>
+
+            <div className="grid sm:grid-cols-3 border-t border-border lg:border-t-0">
+              {quickActions.map((item, index) => (
+                <motion.div
+                  key={item.title}
+                  className="group relative border-b border-border last:border-b-0 sm:border-b-0 sm:border-r sm:last:border-r-0"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: index * 0.1 }}
+                >
+                  <Link
+                    to={item.href}
+                    className="flex h-full min-h-[190px] flex-col px-5 py-7 transition-colors hover:bg-secondary/60 sm:px-6 sm:py-9"
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground shadow-sm">
+                        <item.icon className="h-5 w-5" />
+                      </div>
+                      <ArrowRight className="h-5 w-5 text-muted-foreground transition-all group-hover:translate-x-1 group-hover:text-primary" />
+                    </div>
+                    <p className="mt-5 text-xs font-medium text-muted-foreground">{item.eyebrow}</p>
+                    <h3 className="mt-1 text-base font-semibold text-foreground">{item.title}</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{item.description}</p>
+                    <span className="mt-auto pt-4 text-sm font-semibold text-primary">{item.action}</span>
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
