@@ -17,7 +17,8 @@ import {
   LogOut,
   Settings,
   FileText,
-  Heart
+  Heart,
+  UsersRound
 } from 'lucide-react';
 import logoPhamGia from '@/assets/logo-pham-gia.png';
 import { Button } from '@/components/ui/button';
@@ -49,6 +50,7 @@ export function Header() {
   const navigate = useNavigate();
   const { user, signOut, loading } = useAuth();
   const isAdmin = user?.role === 'admin';
+  const canManageListings = user?.role === 'admin' || user?.role === 'staff';
 
   const handlePostClick = () => {
     setIsMobileMenuOpen(false);
@@ -129,11 +131,19 @@ export function Header() {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-48">
-                      {isAdmin && (
+                      {canManageListings && (
                         <DropdownMenuItem asChild>
                           <Link to="/quan-ly-tin" className="flex items-center gap-2">
                             <FileText className="w-4 h-4" />
                             Quản lý tin đăng
+                          </Link>
+                        </DropdownMenuItem>
+                      )}
+                      {isAdmin && (
+                        <DropdownMenuItem asChild>
+                          <Link to="/quan-ly-nhan-su" className="flex items-center gap-2">
+                            <UsersRound className="w-4 h-4" />
+                            Quản lý nhân sự
                           </Link>
                         </DropdownMenuItem>
                       )}
@@ -169,7 +179,7 @@ export function Header() {
                 )}
               </>
             )}
-            {isAdmin && (
+            {canManageListings && (
               <Button variant="hero" size="sm" className="gap-2" onClick={handlePostClick}>
                 <PlusCircle className="w-4 h-4" />
                 Đăng tin xe
@@ -226,11 +236,19 @@ export function Header() {
               <div className="pt-4 border-t border-border space-y-2">
                 {user ? (
                   <>
-                    {isAdmin && (
+                    {canManageListings && (
                       <Link to="/quan-ly-tin" className="block">
                         <Button variant="outline" className="w-full justify-start gap-2">
                           <FileText className="w-4 h-4" />
                           Quản lý tin đăng
+                        </Button>
+                      </Link>
+                    )}
+                    {isAdmin && (
+                      <Link to="/quan-ly-nhan-su" className="block">
+                        <Button variant="ghost" className="w-full justify-start gap-2">
+                          <UsersRound className="w-4 h-4" />
+                          Quản lý nhân sự
                         </Button>
                       </Link>
                     )}
@@ -263,7 +281,7 @@ export function Header() {
                     </Button>
                   </Link>
                 )}
-                {isAdmin && (
+                {canManageListings && (
                   <Button variant="hero" className="w-full justify-start gap-2" onClick={handlePostClick}>
                     <PlusCircle className="w-4 h-4" />
                     Đăng tin xe

@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { 
   Car, Eye, EyeOff, Pencil, Trash2, Plus, 
   MoreVertical, TrendingUp, Clock, CheckCircle,
-  Search, Loader2, Phone, Rocket
+  Search, Loader2, Phone, Rocket, UsersRound
 } from 'lucide-react';
 import { Layout } from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
@@ -29,7 +29,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase, type ApiManagedUser } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import type { Tables } from '@/integrations/supabase/types';
@@ -57,6 +57,7 @@ export default function MyListingsPage() {
   const navigate = useNavigate();
   
   const [carListings, setCarListings] = useState<CarListing[]>([]);
+  const [ownerMap, setOwnerMap] = useState<Record<string, ApiManagedUser>>({});
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [deleteDialog, setDeleteDialog] = useState<{ open: boolean; type: 'car'; id: string } | null>(null);
@@ -83,23 +84,43 @@ export default function MyListingsPage() {
       
       setLoading(true);
       try {
-        const [carsResponse, viewsResponse, contactsResponse] = await Promise.all([
-          supabase
-            .from('car_listings')
-            .select('*')
-            .eq('user_id', user.id)
-            .order('created_at', { ascending: false }),
+        let carsQuery = supabase
+          .from<CarListing>('car_listings')
+          .select('*');
+
+        if (user.role !== 'admin') {
+          carsQuery = carsQuery.eq('user_id', user.id);
+        }
+
+        const carsResponse = await carsQuery.order('created_at', { ascending: false });
+
+        if (carsResponse.error) throw carsResponse.error;
+
+        const cars = (carsResponse.data || []) as CarListing[];
+        const visibleListingIds = new Set(cars.map((car) => car.id));
+
+        const [viewsResponse, contactsResponse, usersResponse] = await Promise.all([
           supabase
             .from('listing_views')
             .select('listing_id, listing_type'),
           supabase
             .from('listing_contacts')
-            .select('listing_id, listing_type')
+            .select('listing_id, listing_type'),
+          user.role === 'admin' ? supabase.admin.listUsers() : Promise.resolve({ data: null, error: null }),
         ]);
 
-        if (carsResponse.error) throw carsResponse.error;
+        if (usersResponse.error) throw usersResponse.error;
 
-        setCarListings(carsResponse.data || []);
+        setCarListings(cars);
+        if (usersResponse.data) {
+          const mappedOwners = usersResponse.data.reduce<Record<string, ApiManagedUser>>((acc, owner) => {
+            acc[owner.id] = owner;
+            return acc;
+          }, {});
+          setOwnerMap(mappedOwners);
+        } else {
+          setOwnerMap({});
+        }
 
         // Calculate stats
         const carViews: Record<string, number> = {};
@@ -108,14 +129,14 @@ export default function MyListingsPage() {
         let totalContacts = 0;
 
         (viewsResponse.data || []).forEach(view => {
-          if (view.listing_type === 'car') {
+          if (view.listing_type === 'car' && visibleListingIds.has(view.listing_id)) {
             carViews[view.listing_id] = (carViews[view.listing_id] || 0) + 1;
             totalViews++;
           }
         });
 
         (contactsResponse.data || []).forEach(contact => {
-          if (contact.listing_type === 'car') {
+          if (contact.listing_type === 'car' && visibleListingIds.has(contact.listing_id)) {
             carContacts[contact.listing_id] = (carContacts[contact.listing_id] || 0) + 1;
             totalContacts++;
           }
@@ -227,9 +248,17 @@ export default function MyListingsPage() {
     activeCars: carListings.filter(c => c.status === 'active').length,
   };
 
+  const getOwnerLabel = (userId: string) => {
+    const owner = ownerMap[userId];
+    if (!owner) return 'Nhân sự nội bộ';
+    return owner.full_name || owner.email;
+  };
+
   const filteredCars = carListings.filter(car => 
     car.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    car.brand.toLowerCase().includes(searchQuery.toLowerCase())
+    car.brand.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    car.model.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    getOwnerLabel(car.user_id).toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   if (authLoading || loading) {
@@ -255,7 +284,11 @@ export default function MyListingsPage() {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
           <div>
             <h1 className="text-2xl md:text-3xl font-bold text-foreground">Quản lý tin đăng</h1>
-            <p className="text-muted-foreground mt-1">Xem và quản lý các tin đăng của bạn</p>
+            <p className="text-muted-foreground mt-1">
+              {user.role === 'admin'
+                ? 'Theo dõi toàn bộ tin xe của công ty và hiệu quả từng bài đăng'
+                : 'Theo dõi tin xe bạn phụ trách và hiệu quả từng bài đăng'}
+            </p>
           </div>
           <div className="flex gap-3">
             <Link to="/dang-tin">
@@ -268,7 +301,7 @@ export default function MyListingsPage() {
         </div>
 
         {/* Stats Overview */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+        <div className="grid grid-cols-1 gap-4 mb-8 sm:grid-cols-2 lg:grid-cols-4">
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
@@ -282,6 +315,21 @@ export default function MyListingsPage() {
               </div>
             </CardContent>
           </Card>
+          {user.role === 'admin' && (
+            <Card>
+              <CardContent className="p-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center">
+                    <UsersRound className="w-5 h-5 text-foreground" />
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold">{Object.keys(ownerMap).filter((id) => ownerMap[id].role === 'staff').length}</p>
+                    <p className="text-xs text-muted-foreground">Nhân sự có thể đăng tin</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
@@ -341,11 +389,11 @@ export default function MyListingsPage() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.05 }}
                   >
-                    <Card className={`overflow-hidden ${car.status === 'hidden' ? 'opacity-60' : ''}`}>
+                    <Card className={`overflow-hidden border-border/80 transition-shadow hover:shadow-md ${car.status === 'hidden' ? 'opacity-60' : ''}`}>
                       <CardContent className="p-0">
                         <div className="flex flex-col md:flex-row">
                           {/* Image */}
-                          <div className="w-full md:w-48 h-32 md:h-auto flex-shrink-0">
+                          <div className="w-full md:w-52 h-36 md:h-auto flex-shrink-0">
                             <img 
                               src={car.images?.[0] || '/placeholder.svg'} 
                               alt={car.title}
@@ -375,18 +423,24 @@ export default function MyListingsPage() {
                                   <span>•</span>
                                   <span>{car.location || 'Chưa cập nhật'}</span>
                                 </div>
+                                {user.role === 'admin' && (
+                                  <div className="mt-3 inline-flex items-center gap-2 rounded-full bg-secondary px-3 py-1 text-xs font-medium text-secondary-foreground">
+                                    <UsersRound className="h-3.5 w-3.5" />
+                                    Người đăng: {getOwnerLabel(car.user_id)}
+                                  </div>
+                                )}
                               </div>
                               
                               {/* Stats & Actions */}
                               <div className="flex flex-col items-end gap-2">
-                                <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                                  <span className="flex items-center gap-1">
-                                    <Eye className="w-3 h-3" />
-                                    {stats.carViews[car.id] || 0}
+                                <div className="flex flex-wrap justify-end gap-2 text-xs">
+                                  <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-1 font-medium text-primary">
+                                    <Eye className="w-3.5 h-3.5" />
+                                    {stats.carViews[car.id] || 0} xem
                                   </span>
-                                  <span className="flex items-center gap-1">
-                                    <Phone className="w-3 h-3" />
-                                    {stats.carContacts[car.id] || 0}
+                                  <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-2.5 py-1 font-medium text-secondary-foreground">
+                                    <Phone className="w-3.5 h-3.5" />
+                                    {stats.carContacts[car.id] || 0} liên hệ
                                   </span>
                                 </div>
                                 <p className="text-xs text-muted-foreground">

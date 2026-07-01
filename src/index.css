@@ -1,11 +1,8 @@
-@import '@fontsource/urbanist/500.css';
-@import '@fontsource/urbanist/600.css';
-@import '@fontsource/urbanist/700.css';
-@import '@fontsource/urbanist/800.css';
-@import '@fontsource/manrope/400.css';
-@import '@fontsource/manrope/500.css';
-@import '@fontsource/manrope/600.css';
-@import '@fontsource/manrope/700.css';
+@import '@fontsource/be-vietnam-pro/vietnamese-400.css';
+@import '@fontsource/be-vietnam-pro/vietnamese-500.css';
+@import '@fontsource/be-vietnam-pro/vietnamese-600.css';
+@import '@fontsource/be-vietnam-pro/vietnamese-700.css';
+@import '@fontsource/be-vietnam-pro/vietnamese-800.css';
 
 @tailwind base;
 @tailwind components;
@@ -150,12 +147,12 @@
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
-    font-feature-settings: "ss01", "cv11";
+    font-feature-settings: "kern", "liga";
   }
 
   h1, h2, h3, h4, h5 {
-    @apply font-display tracking-tight;
-    letter-spacing: -0.02em;
+    @apply font-display;
+    letter-spacing: 0;
   }
 }
 
@@ -186,7 +183,7 @@
     background: hsl(var(--plate-bg));
     color: hsl(var(--plate-text));
     border: 2px solid hsl(var(--plate-border));
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: "Be Vietnam Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     letter-spacing: 0.1em;
   }
 

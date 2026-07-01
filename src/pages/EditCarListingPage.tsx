@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
-import { carBrands, provinces, formatPrice } from '@/lib/mockData';
+import { carBrands, carFeatureOptions, carProductionYears, provinces, formatPrice } from '@/lib/mockData';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
@@ -30,12 +30,6 @@ const transmissionTypes = ['Số sàn', 'Số tự động'];
 const originTypes = ['Trong nước', 'Nhập khẩu'];
 const colorOptions = ['Trắng', 'Đen', 'Bạc', 'Xám', 'Đỏ', 'Xanh dương', 'Xanh rêu', 'Vàng', 'Cam', 'Nâu'];
 const seatsOptions = [2, 4, 5, 7, 8, 9, 16];
-const featureOptions = [
-  'Cửa sổ trời', 'Ghế da', 'Camera 360', 'Camera lùi', 'Cảm biến va chạm', 
-  'Đèn LED', 'Màn hình cảm ứng', 'Apple CarPlay', 'Android Auto', 'Định vị GPS',
-  'Ghế chỉnh điện', 'Ghế thông gió', 'Ghế sưởi', 'Cảm biến áp suất lốp', 
-  'Cruise Control', 'Phanh ABS', 'Cân bằng điện tử', 'Khởi động nút bấm'
-];
 
 interface FormData {
   brand: string;
@@ -62,6 +56,7 @@ export default function EditCarListingPage() {
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [customFeature, setCustomFeature] = useState('');
   
   const [formData, setFormData] = useState<FormData>({
     brand: '',
@@ -91,12 +86,16 @@ export default function EditCarListingPage() {
     async function fetchListing() {
       if (!id || !user) return;
 
-      const { data, error } = await supabase
+      let listingQuery = supabase
         .from('car_listings')
         .select('*')
-        .eq('id', id)
-        .eq('user_id', user.id)
-        .maybeSingle();
+        .eq('id', id);
+
+      if (user.role !== 'admin') {
+        listingQuery = listingQuery.eq('user_id', user.id);
+      }
+
+      const { data, error } = await listingQuery.maybeSingle();
 
       if (error || !data) {
         toast.error('Không tìm thấy tin đăng hoặc bạn không có quyền chỉnh sửa');
@@ -146,6 +145,7 @@ export default function EditCarListingPage() {
 
   const selectedBrand = carBrands.find(b => b.name === formData.brand);
   const availableModels = selectedBrand?.models || [];
+  const visibleFeatureOptions = Array.from(new Set([...carFeatureOptions, ...formData.features]));
 
   const updateFormData = (field: keyof FormData, value: string | string[] | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -158,6 +158,19 @@ export default function EditCarListingPage() {
         ? prev.features.filter(f => f !== feature)
         : [...prev.features, feature]
     }));
+  };
+
+  const addCustomFeature = () => {
+    const normalizedFeature = customFeature.trim().replace(/\s+/g, ' ');
+    if (!normalizedFeature) return;
+
+    setFormData(prev => ({
+      ...prev,
+      features: prev.features.includes(normalizedFeature)
+        ? prev.features
+        : [...prev.features, normalizedFeature],
+    }));
+    setCustomFeature('');
   };
 
   const validateStep = (step: number): boolean => {
@@ -202,7 +215,7 @@ export default function EditCarListingPage() {
     setIsSubmitting(true);
     
     try {
-      const { error } = await supabase
+      let updateQuery = supabase
         .from('car_listings')
         .update({
           title: formData.title.trim(),
@@ -221,8 +234,13 @@ export default function EditCarListingPage() {
           location: formData.locationProvince || null,
           images: formData.images.length > 0 ? formData.images : null,
         })
-        .eq('id', id)
-        .eq('user_id', user.id);
+        .eq('id', id);
+
+      if (user.role !== 'admin') {
+        updateQuery = updateQuery.eq('user_id', user.id);
+      }
+
+      const { error } = await updateQuery;
 
       if (error) {
         console.error('Error updating listing:', error);
@@ -330,7 +348,7 @@ export default function EditCarListingPage() {
               <SelectValue placeholder="Chọn năm" />
             </SelectTrigger>
             <SelectContent>
-              {Array.from({ length: 15 }, (_, i) => 2024 - i).map(year => (
+              {carProductionYears.map(year => (
                 <SelectItem key={year} value={year.toString()}>{year}</SelectItem>
               ))}
             </SelectContent>
@@ -420,8 +438,24 @@ export default function EditCarListingPage() {
 
       <div className="space-y-3">
         <Label>Tính năng & tiện ích</Label>
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <Input
+            value={customFeature}
+            onChange={(event) => setCustomFeature(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') {
+                event.preventDefault();
+                addCustomFeature();
+              }
+            }}
+            placeholder="Nhập tiện ích khác, ví dụ: Camera hành trình Vietmap"
+          />
+          <Button type="button" variant="outline" onClick={addCustomFeature} className="shrink-0">
+            Thêm tiện ích
+          </Button>
+        </div>
         <div className="flex flex-wrap gap-2">
-          {featureOptions.map(feature => (
+          {visibleFeatureOptions.map(feature => (
             <Badge
               key={feature}
               variant={formData.features.includes(feature) ? 'default' : 'outline'}

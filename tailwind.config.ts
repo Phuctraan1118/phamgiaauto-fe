@@ -27,8 +27,20 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ["Manrope", "system-ui", "sans-serif"],
-        display: ["Urbanist", "Manrope", "system-ui", "sans-serif"],
+        sans: [
+          "Be Vietnam Pro",
+          "-apple-system",
+          "BlinkMacSystemFont",
+          "Segoe UI",
+          "sans-serif",
+        ],
+        display: [
+          "Be Vietnam Pro",
+          "-apple-system",
+          "BlinkMacSystemFont",
+          "Segoe UI",
+          "sans-serif",
+        ],
       },
       colors: {
         border: "hsl(var(--border))",

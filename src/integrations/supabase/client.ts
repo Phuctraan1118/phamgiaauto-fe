@@ -1,6 +1,6 @@
 import type { Database } from './types';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const API_URL = ((import.meta.env.VITE_API_URL as string | undefined) ?? 'http://localhost:8000').replace(/\/$/, '');
 const SESSION_KEY = 'phamgiaauto_session';
 
 type TableName = keyof Database['public']['Tables'];
@@ -10,12 +10,19 @@ type QueryOrder = { column: string; ascending: boolean; nullsFirst?: boolean };
 export type ApiUser = {
   id: string;
   email: string;
-  role: 'admin' | 'user';
+  role: 'admin' | 'staff' | 'user';
 };
 
 export type ApiSession = {
   access_token: string;
   user: ApiUser;
+};
+
+export type ApiManagedUser = ApiUser & {
+  full_name: string | null;
+  phone: string | null;
+  avatar_url: string | null;
+  created_at: string;
 };
 
 type AuthCallback = (event: string, session: ApiSession | null) => void;
@@ -52,7 +59,10 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
     headers.set('Authorization', `Bearer ${session.access_token}`);
   }
 
-  const response = await fetch(`${API_URL}${path}`, { ...options, headers });
+  const normalizedPath = API_URL.endsWith('/api') && path.startsWith('/api/')
+    ? path.slice('/api'.length)
+    : path;
+  const response = await fetch(`${API_URL}${normalizedPath}`, { ...options, headers });
   const payload = await response.json().catch(() => null);
 
   if (!response.ok) {
@@ -227,7 +237,8 @@ function storageBucket(bucket: string) {
       }
     },
     getPublicUrl(path: string) {
-      return { data: { publicUrl: `${API_URL}/uploads/${bucket}/${path}` } };
+      const uploadBaseUrl = API_URL ? API_URL : '/api';
+      return { data: { publicUrl: `${uploadBaseUrl}/uploads/${bucket}/${path}` } };
     },
     async remove(paths: string[]) {
       try {
@@ -299,6 +310,33 @@ export const supabase = {
     async signOut() {
       setStoredSession(null);
       return { error: null };
+    },
+  },
+  admin: {
+    async listUsers() {
+      try {
+        const data = await request<ApiManagedUser[]>('/api/admin/users');
+        return { data, error: null };
+      } catch (error) {
+        return { data: null, error: error as Error };
+      }
+    },
+    async createUser(payload: {
+      email: string;
+      password: string;
+      full_name?: string;
+      phone?: string;
+      role: 'admin' | 'staff';
+    }) {
+      try {
+        const data = await request<ApiManagedUser>('/api/admin/users', {
+          method: 'POST',
+          body: JSON.stringify(payload),
+        });
+        return { data, error: null };
+      } catch (error) {
+        return { data: null, error: error as Error };
+      }
     },
   },
   storage: {

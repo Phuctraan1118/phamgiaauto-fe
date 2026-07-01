@@ -24,7 +24,7 @@ export function PlateDisplay({ plateNumber, size = 'md', className }: PlateDispl
         className
       )}
       style={{
-        fontFamily: "'Be Vietnam Pro', sans-serif",
+        fontFamily: '"Be Vietnam Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
         letterSpacing: '0.15em',
       }}
     >

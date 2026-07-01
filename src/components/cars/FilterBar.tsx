@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { carBrands, provinces } from '@/lib/mockData';
+import { carBrands, carProductionYears, provinces } from '@/lib/mockData';
 
 interface FilterBarProps {
   onFilterChange?: (filters: FilterValues) => void;
@@ -43,8 +43,6 @@ const priceRanges = [
   { label: '1 - 2 tỷ', min: '1000000000', max: '2000000000' },
   { label: 'Trên 2 tỷ', min: '2000000000', max: '' },
 ];
-
-const years = Array.from({ length: 20 }, (_, i) => new Date().getFullYear() - i);
 
 export function FilterBar({ onFilterChange, initialFilters }: FilterBarProps) {
   const [filters, setFilters] = useState<FilterValues>(() => ({ ...defaultFilters, ...initialFilters }));
@@ -172,7 +170,7 @@ export function FilterBar({ onFilterChange, initialFilters }: FilterBarProps) {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Tất cả năm</SelectItem>
-                  {years.map((year) => (
+                  {carProductionYears.map((year) => (
                     <SelectItem key={year} value={year.toString()}>
                       {year}
                     </SelectItem>
@@ -186,7 +184,7 @@ export function FilterBar({ onFilterChange, initialFilters }: FilterBarProps) {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Tất cả năm</SelectItem>
-                  {years.map((year) => (
+                  {carProductionYears.map((year) => (
                     <SelectItem key={year} value={year.toString()}>
                       {year}
                     </SelectItem>
