@@ -3,10 +3,15 @@ import { Layout } from '@/components/layout/Layout';
 import { CompanyPageHeader } from '@/components/layout/CompanyPageHeader';
 import { Button } from '@/components/ui/button';
 
+const PHONE_DISPLAY = '+84 794 111 112';
+const PHONE_TEL = '+84794111112';
+const SHOWROOM_ADDRESS = '14 Đ. Số 07, KDC Đường 10, Bến Lức, Tây Ninh 82606, Việt Nam';
+const SHOWROOM_MAP_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(SHOWROOM_ADDRESS)}`;
+
 const contactItems = [
-  { icon: Phone, label: 'Hotline', value: '+84 853 202 202', href: 'tel:+84853202202' },
+  { icon: Phone, label: 'Hotline', value: PHONE_DISPLAY, href: `tel:${PHONE_TEL}` },
   { icon: Mail, label: 'Email', value: 'support@phamgiaauto.vn', href: 'mailto:support@phamgiaauto.vn' },
-  { icon: MapPin, label: 'Showroom', value: '14 Đ. Số 07, KDC, Bến Lức, Tây Ninh 82606, Việt Nam' },
+  { icon: MapPin, label: 'Showroom', value: SHOWROOM_ADDRESS, href: SHOWROOM_MAP_URL },
   { icon: Clock3, label: 'Thời gian làm việc', value: 'Thứ Hai - Chủ Nhật, 08:00 - 18:00' },
 ];
 
@@ -29,7 +34,18 @@ export default function ContactPage() {
                   <item.icon className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
                   <div>
                     <p className="text-sm font-semibold">{item.label}</p>
-                    {item.href ? <a href={item.href} className="mt-1 block text-sm text-muted-foreground hover:text-primary">{item.value}</a> : <p className="mt-1 text-sm text-muted-foreground">{item.value}</p>}
+                    {item.href ? (
+                      <a
+                        href={item.href}
+                        target={item.href.startsWith('https://www.google.com/maps') ? '_blank' : undefined}
+                        rel={item.href.startsWith('https://www.google.com/maps') ? 'noreferrer' : undefined}
+                        className="mt-1 block text-sm text-muted-foreground hover:text-primary"
+                      >
+                        {item.value}
+                      </a>
+                    ) : (
+                      <p className="mt-1 text-sm text-muted-foreground">{item.value}</p>
+                    )}
                   </div>
                 </div>
               ))}
@@ -40,7 +56,7 @@ export default function ContactPage() {
             <h2 className="mt-2 text-2xl font-bold sm:text-3xl">Xem xe và lái thử tại showroom</h2>
             <p className="mt-3 max-w-xl text-sm leading-6 text-muted-foreground">Gọi trước để đội ngũ chuẩn bị xe, hồ sơ liên quan và chuyên viên tư vấn đúng nhu cầu của bạn.</p>
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-              <Button asChild size="lg"><a href="tel:+84853202202"><Phone /> Gọi đặt lịch</a></Button>
+              <Button asChild size="lg"><a href={`tel:${PHONE_TEL}`}><Phone /> Gọi đặt lịch</a></Button>
               <Button asChild variant="outline" size="lg"><a href="mailto:support@phamgiaauto.vn"><Mail /> Gửi email</a></Button>
             </div>
           </div>

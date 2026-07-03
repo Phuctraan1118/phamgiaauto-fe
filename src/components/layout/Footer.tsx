@@ -2,6 +2,11 @@ import { Link } from 'react-router-dom';
 import { Facebook, Youtube, Phone, Mail, MapPin } from 'lucide-react';
 import logoPhamGia from '@/assets/logo-pham-gia.png';
 
+const PHONE_DISPLAY = '+84 794 111 112';
+const PHONE_TEL = '+84794111112';
+const SHOWROOM_ADDRESS = '14 Đ. Số 07, KDC Đường 10, Bến Lức, Tây Ninh 82606, Việt Nam';
+const SHOWROOM_MAP_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(SHOWROOM_ADDRESS)}`;
+
 export function Footer() {
   return (
     <footer className="gradient-primary text-primary-foreground">
@@ -65,7 +70,9 @@ export function Footer() {
                 <Phone className="w-4 h-4 sm:w-5 sm:h-5 mt-0.5 text-white flex-shrink-0" />
                 <div>
                   <p className="text-xs sm:text-sm font-medium">Hotline</p>
-                  <p className="text-xs sm:text-sm text-primary-foreground/75">+84 853 202 202</p>
+                  <a href={`tel:${PHONE_TEL}`} className="text-xs sm:text-sm text-primary-foreground/75 hover:text-primary-foreground transition-colors">
+                    {PHONE_DISPLAY}
+                  </a>
                 </div>
               </div>
               <div className="flex items-start gap-2 sm:gap-3">
@@ -79,7 +86,14 @@ export function Footer() {
                 <MapPin className="w-4 h-4 sm:w-5 sm:h-5 mt-0.5 text-white flex-shrink-0" />
                 <div>
                   <p className="text-xs sm:text-sm font-medium">Địa chỉ</p>
-                  <p className="text-xs sm:text-sm text-primary-foreground/75">14 Đ. Số 07, KDC, Bến Lức, Tây Ninh 82606, Việt Nam</p>
+                  <a
+                    href={SHOWROOM_MAP_URL}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-xs sm:text-sm text-primary-foreground/75 hover:text-primary-foreground transition-colors"
+                  >
+                    {SHOWROOM_ADDRESS}
+                  </a>
                 </div>
               </div>
             </div>

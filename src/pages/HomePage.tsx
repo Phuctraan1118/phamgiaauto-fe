@@ -248,7 +248,7 @@ export default function HomePage() {
           <p className="text-primary-foreground/80 mb-6 sm:mb-8 max-w-2xl mx-auto text-sm sm:text-base px-4">
             Gửi thông tin xe hoặc gọi cho Phạm Gia Auto để được kiểm tra, định giá minh bạch và thu mua nhanh chóng
           </p>
-          <a href="tel:19001234">
+          <a href="tel:+84794111112">
             <Button size="lg" className="bg-white text-primary hover:bg-white/90 w-full sm:w-auto">
               Gọi tư vấn thu mua
               <ArrowRight className="w-5 h-5" />
