@@ -5,7 +5,7 @@ import logoPhamGia from '@/assets/logo-pham-gia.png';
 const PHONE_DISPLAY = '+84 794 111 112';
 const PHONE_TEL = '+84794111112';
 const SHOWROOM_ADDRESS = '14 Đ. Số 07, KDC Đường 10, Bến Lức, Tây Ninh 82606, Việt Nam';
-const SHOWROOM_MAP_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(SHOWROOM_ADDRESS)}`;
+const SHOWROOM_MAP_URL = 'https://www.google.com/maps/place/CTY+CP+TRUY%E1%BB%80N+TH%C3%94NG+PH%E1%BA%A0M+GIA+MEDIA/@10.6406618,106.4934446,20.52z/data=!4m15!1m8!3m7!1s0x310acc892dac172b:0x10082b90b9e835b7!2zMTQsIMSQxrDhu51uZyBT4buRIDE0LzE1IMSQLiBT4buRIDEwLCBLREMsIELhur9uIEzhu6ljLCBUw6J5IE5pbmgsIFZp4buHdCBOYW0!3b1!8m2!3d10.6403445!4d106.4933865!16s%2Fg%2F11xsqrtsws!3m5!1s0x310acd6946d88d81:0x8d5306d9374a7d36!8m2!3d10.640574!4d106.4934389!16s%2Fg%2F11z58b57y6?entry=ttu&g_ep=EgoyMDI2MDYyOS4wIKXMDSoASAFQAw%3D%3D';
 
 export function Footer() {
   return (
