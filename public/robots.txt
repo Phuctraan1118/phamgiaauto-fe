@@ -1,14 +1,11 @@
-User-agent: Googlebot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-User-agent: Twitterbot
-Allow: /
-
-User-agent: facebookexternalhit
-Allow: /
-
 User-agent: *
 Allow: /
+Disallow: /auth
+Disallow: /cai-dat
+Disallow: /quan-ly-tin
+Disallow: /quan-ly-nhan-su
+Disallow: /yeu-thich
+Disallow: /dang-tin
+Disallow: /chinh-sua-xe/
+
+Sitemap: https://phamgiaautomotive.vn/sitemap.xml

@@ -4,7 +4,7 @@ import { CompanyPageHeader } from '@/components/layout/CompanyPageHeader';
 import { Button } from '@/components/ui/button';
 
 const contactItems = [
-  { icon: Phone, label: 'Hotline', value: '+84 853 202 202', href: 'tel:19001234' },
+  { icon: Phone, label: 'Hotline', value: '+84 853 202 202', href: 'tel:+84853202202' },
   { icon: Mail, label: 'Email', value: 'support@phamgiaauto.vn', href: 'mailto:support@phamgiaauto.vn' },
   { icon: MapPin, label: 'Showroom', value: '14 Đ. Số 07, KDC, Bến Lức, Tây Ninh 82606, Việt Nam' },
   { icon: Clock3, label: 'Thời gian làm việc', value: 'Thứ Hai - Chủ Nhật, 08:00 - 18:00' },
@@ -40,7 +40,7 @@ export default function ContactPage() {
             <h2 className="mt-2 text-2xl font-bold sm:text-3xl">Xem xe và lái thử tại showroom</h2>
             <p className="mt-3 max-w-xl text-sm leading-6 text-muted-foreground">Gọi trước để đội ngũ chuẩn bị xe, hồ sơ liên quan và chuyên viên tư vấn đúng nhu cầu của bạn.</p>
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-              <Button asChild size="lg"><a href="tel:19001234"><Phone /> Gọi đặt lịch</a></Button>
+              <Button asChild size="lg"><a href="tel:+84853202202"><Phone /> Gọi đặt lịch</a></Button>
               <Button asChild variant="outline" size="lg"><a href="mailto:support@phamgiaauto.vn"><Mail /> Gửi email</a></Button>
             </div>
           </div>
