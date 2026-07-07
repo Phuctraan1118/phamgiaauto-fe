@@ -21,6 +21,8 @@ import ServicesPage from "./pages/ServicesPage";
 import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
 import TrafficViolationPage from "./pages/TrafficViolationPage";
+import TermsPage from "./pages/TermsPage";
+import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -61,6 +63,16 @@ const routeSeo = [
     match: (path: string) => path === "/lien-he",
     title: "Liên hệ Phạm Gia Automotive - Đặt lịch xem xe",
     description: "Liên hệ Phạm Gia Automotive để đặt lịch xem xe, nhận tư vấn mua xe cũ hoặc yêu cầu định giá xe cần bán.",
+  },
+  {
+    match: (path: string) => path === "/dieu-khoan-su-dung",
+    title: "Điều khoản sử dụng - Phạm Gia Automotive",
+    description: "Điều khoản sử dụng website Phạm Gia Automotive khi xem thông tin xe cũ, đặt lịch xem xe, yêu cầu tư vấn và sử dụng tiện ích hỗ trợ.",
+  },
+  {
+    match: (path: string) => path === "/chinh-sach-bao-mat",
+    title: "Chính sách bảo mật - Phạm Gia Automotive",
+    description: "Chính sách bảo mật thông tin khách hàng khi liên hệ, đặt lịch xem xe, yêu cầu tư vấn hoặc sử dụng website Phạm Gia Automotive.",
   },
 ];
 
@@ -138,6 +150,8 @@ const App = () => (
             <Route path="/kiem-phat-nguoi" element={<TrafficViolationPage />} />
             <Route path="/ve-chung-toi" element={<AboutPage />} />
             <Route path="/lien-he" element={<ContactPage />} />
+            <Route path="/dieu-khoan-su-dung" element={<TermsPage />} />
+            <Route path="/chinh-sach-bao-mat" element={<PrivacyPolicyPage />} />
             <Route path="/bien-so" element={<NotFound />} />
             <Route path="/bien-so/:id" element={<NotFound />} />
             <Route path="/dang-tin" element={<StaffRoute><CreateListingPage /></StaffRoute>} />

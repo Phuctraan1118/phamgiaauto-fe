@@ -105,12 +105,12 @@ export function Footer() {
             ©2026 Phạm Gia Automotive. Tất cả quyền được bảo lưu.
           </p>
           <div className="flex gap-4 sm:gap-6">
-            <a href="#" className="text-xs sm:text-sm text-primary-foreground/70 hover:text-primary-foreground transition-colors">
+            <Link to="/dieu-khoan-su-dung" className="text-xs sm:text-sm text-primary-foreground/70 hover:text-primary-foreground transition-colors">
               Điều khoản sử dụng
-            </a>
-            <a href="#" className="text-xs sm:text-sm text-primary-foreground/70 hover:text-primary-foreground transition-colors">
+            </Link>
+            <Link to="/chinh-sach-bao-mat" className="text-xs sm:text-sm text-primary-foreground/70 hover:text-primary-foreground transition-colors">
               Chính sách bảo mật
-            </a>
+            </Link>
           </div>
         </div>
       </div>
