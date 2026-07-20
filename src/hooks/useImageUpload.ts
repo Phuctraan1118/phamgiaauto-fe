@@ -3,13 +3,13 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
 interface UseImageUploadOptions {
-  maxFiles?: number;
+  maxFiles?: number | null;
   maxSizeMB?: number;
   folder?: string;
 }
 
 export function useImageUpload(userId: string | undefined, options: UseImageUploadOptions = {}) {
-  const { maxFiles = 10, maxSizeMB = 5, folder = 'cars' } = options;
+  const { maxFiles = null, maxSizeMB = 5, folder = 'cars' } = options;
   const [images, setImages] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
 
@@ -47,7 +47,7 @@ export function useImageUpload(userId: string | undefined, options: UseImageUplo
   const handleFileSelect = async (files: FileList | null) => {
     if (!files || files.length === 0) return;
 
-    if (images.length + files.length > maxFiles) {
+    if (maxFiles !== null && images.length + files.length > maxFiles) {
       toast.error(`Tối đa ${maxFiles} ảnh`);
       return;
     }

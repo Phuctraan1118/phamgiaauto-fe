@@ -88,7 +88,6 @@ export default function CreateListingPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   const { images, uploading, handleFileSelect, removeImage: removeUploadedImage, setImages } = useImageUpload(user?.id, {
-    maxFiles: 10,
     folder: 'cars',
   });
 
@@ -532,7 +531,7 @@ export default function CreateListingPage() {
     <div className="space-y-6">
       <div className="text-center">
         <h3 className="text-lg font-semibold mb-2">Thêm hình ảnh xe</h3>
-        <p className="text-muted-foreground">Tối đa 10 ảnh. Ảnh đầu tiên sẽ là ảnh đại diện.</p>
+        <p className="text-muted-foreground">Có thể tải nhiều ảnh. Ảnh đầu tiên sẽ là ảnh đại diện.</p>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
@@ -551,9 +550,7 @@ export default function CreateListingPage() {
           </div>
         ))}
         
-        {formData.images.length < 10 && (
-          <ImageDropZone onFiles={handleFileSelect} uploading={uploading} />
-        )}
+        <ImageDropZone onFiles={handleFileSelect} uploading={uploading} />
       </div>
 
       <div className="bg-muted/50 rounded-lg p-4">

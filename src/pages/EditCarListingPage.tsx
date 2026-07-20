@@ -77,7 +77,6 @@ export default function EditCarListingPage() {
   });
 
   const { images, uploading, handleFileSelect, removeImage: removeUploadedImage, setImages } = useImageUpload(user?.id, {
-    maxFiles: 10,
     folder: 'cars',
   });
 
@@ -531,8 +530,8 @@ export default function EditCarListingPage() {
   const renderStep3 = () => (
     <div className="space-y-6">
       <div className="space-y-2">
-        <Label>Hình ảnh xe ({formData.images.length}/10)</Label>
-        <p className="text-sm text-muted-foreground">Thêm tối đa 10 ảnh. Ảnh đầu tiên sẽ là ảnh đại diện.</p>
+        <Label>Hình ảnh xe ({formData.images.length} ảnh)</Label>
+        <p className="text-sm text-muted-foreground">Có thể tải nhiều ảnh. Ảnh đầu tiên sẽ là ảnh đại diện.</p>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
@@ -554,9 +553,7 @@ export default function EditCarListingPage() {
           </div>
         ))}
 
-        {formData.images.length < 10 && (
-          <ImageDropZone onFiles={handleFileSelect} uploading={uploading} />
-        )}
+        <ImageDropZone onFiles={handleFileSelect} uploading={uploading} />
       </div>
     </div>
   );
