@@ -9,7 +9,7 @@ interface UseImageUploadOptions {
 }
 
 export function useImageUpload(userId: string | undefined, options: UseImageUploadOptions = {}) {
-  const { maxFiles = null, maxSizeMB = 5, folder = 'cars' } = options;
+  const { maxFiles = null, maxSizeMB = 20, folder = 'cars' } = options;
   const [images, setImages] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
 

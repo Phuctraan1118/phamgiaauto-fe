@@ -559,7 +559,7 @@ export default function CreateListingPage() {
           <li>• Chụp ảnh trong điều kiện ánh sáng tốt</li>
           <li>• Nên có ảnh: ngoại thất 4 góc, nội thất, đồng hồ taplo, động cơ</li>
           <li>• Ảnh rõ nét, không bị mờ hoặc rung</li>
-          <li>• Kích thước tối đa 5MB mỗi ảnh</li>
+          <li>• Kích thước tối đa 20MB mỗi ảnh</li>
         </ul>
       </div>
     </div>

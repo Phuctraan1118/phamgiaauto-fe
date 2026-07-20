@@ -422,7 +422,7 @@ export default function CreatePlateListingPage() {
           <li>• Chụp rõ giấy chứng nhận trúng đấu giá (nếu có)</li>
           <li>• Chụp giấy đăng ký xe gắn với biển số</li>
           <li>• Ảnh rõ nét, không bị mờ, che khuất</li>
-          <li>• Kích thước tối đa 5MB mỗi ảnh</li>
+          <li>• Kích thước tối đa 20MB mỗi ảnh</li>
         </ul>
       </div>
     </div>
