@@ -27,7 +27,8 @@ import {
 } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const API_URL = ((import.meta.env.VITE_API_URL as string | undefined) || 'http://localhost:8000').replace(/\/$/, '');
+const API_PREFIX = API_URL.endsWith('/api') ? '' : '/api';
 
 type VehicleType = 'car' | 'motorbike' | 'electric_bike';
 
@@ -111,7 +112,7 @@ export default function TrafficViolationPage() {
     setResult(null);
 
     try {
-      const response = await fetch(`${API_URL}/api/traffic-violations/check`, {
+      const response = await fetch(`${API_URL}${API_PREFIX}/traffic-violations/check`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
